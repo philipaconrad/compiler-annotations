@@ -41,11 +41,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define pure
 
 /* 'frestrict' is 'restrict', but for functions. */
-#define frestrict __declspec( restrict )
+#define frestrict __declspec(restrict)
 
 /* 'noalias' means that a function call does not modify or reference visible global state and only modifies the 
 memory pointed to directly by pointer parameters (first-level indirections). */
-#define noalias __declspec( noalias )
+#define noalias __declspec(noalias)
 
 /* 'inline' works similarly to the C++ equivalent. */
 #define inline __inline
@@ -71,7 +71,7 @@ memory pointed to directly by pointer parameters (first-level indirections). */
 /* ----- VARIABLE ANNOTATIONS ----- */
 
 /* 'restrict' for variables. */
-#define restrict __restrict
+#define vrestrict __restrict
 
 
 
@@ -116,7 +116,7 @@ function's generated code to be relocated to a quick-access zone of the executab
 /* ----- VARIABLE ANNOTATIONS ----- */
 
 /* 'restrict' works for both variables and functions in GCC. */
-#define restrict __restrict__
+#define vrestrict __restrict__
 
 
 
@@ -147,7 +147,7 @@ function's generated code to be relocated to a quick-access zone of the executab
 
 /* ----- VARIABLE ANNOTATIONS ----- */
 
-#define restrict
+#define vrestrict
 
 
 
