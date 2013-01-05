@@ -34,25 +34,30 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /* ----- FUNCTION ANNOTATIONS ----- */
 
-/* 'fconst' (specifically, the GCC const attribute) has no meaning to MSVC. */
+/* 'fconst' (specifically, the GCC const attribute) has no equivalent in MSVC. */
 #define fconst
 
-/* 'pure' has no meaning to MSVC. */
+/* 'pure' has no equivalent in MSVC. */
 #define pure
 
-/* 'frestrict' is 'restrict', but for functions. */
+/* 'frestrict' is like 'vrestrict', but for functions. */
 #define frestrict __declspec(restrict)
 
 /* 'noalias' means that a function call does not modify or reference visible global state and only modifies the 
 memory pointed to directly by pointer parameters (first-level indirections). */
 #define noalias __declspec(noalias)
 
-/* 'inline' works similarly to the C++ equivalent. */
+/* 'inline' causes the "inlined" function to be basically expanded in-place inside calling functions. The advantage 
+   of this is that the calling function need not "call out" to the function. This saves a bunch of stack and register 
+   ops, at the cost of sometimes bigger code. The biggest wins with 'inline' are seen with tiny, oft-used functions. */
 #define inline __inline
 
 /* 'forcedinline' forces inlining in almost all circumstances, regardless of whether the compiler likes it or not.
    use with great care. */
 #define forceinline __forceinline
+
+/* 'flatten' has no equivalent in MSVC. */
+#define flatten
 
 /* 'noinline' in MSVC++ tells the compiler to never inline a particular member function (function in a class). 
    otherwise, it should do no harm. */
@@ -62,17 +67,16 @@ memory pointed to directly by pointer parameters (first-level indirections). */
    Note: this can only be used at the function definition site; it can't be used in prototypes. */
 #define naked __declspec( naked )
 
-/* 'hot' has no meaning to MSVC. */
+/* 'hot' has no equivalent in MSVC. */
 #define hot
 
-/* 'cold' has no meaning to MSVC. */
+/* 'cold' has no equivalent in MSVC. */
 #define cold
 
 /* ----- VARIABLE ANNOTATIONS ----- */
 
 /* 'restrict' for variables. */
 #define vrestrict __restrict
-
 
 
 /* ----- GCC Loadout ----------------------------------------------------------- */
@@ -92,12 +96,16 @@ memory pointed to directly by pointer parameters (first-level indirections). */
 /* 'noalias' in MSVC is very close in meaning to the "malloc" attribute in GCC. */
 #define noalias __attribute__((malloc))
 
-/* 'inline' for functions. */
+/* 'inline' causes the "inlined" function to be basically expanded in-place inside calling functions. The advantage 
+   of this is that the calling function need not "call out" to the function. This saves a bunch of stack and register 
+   ops, at the cost of sometimes bigger code. The biggest wins with 'inline' are seen with tiny, oft-used functions. */
 #define inline __inline__
 
-/* 'forceinline' uses the "always_inline" attribute in GCC. if 'flatten' is on, it will force inlining 
-   further than usual. turn on 'flatten' only if you know what you are doing. */
-#define forceinline __attribute__((always_inline)) /* __attribute__((flatten)) */
+/* 'forceinline' uses the "always_inline" attribute in GCC. */
+#define forceinline __attribute__((always_inline))
+
+/* 'flatten' causes GCC to try to inline all calls inside this function. use sparingly and with caution. */
+#define flatten __attribute__((flatten))
 
 /* 'noinline' prevents inlining. */
 #define noinline __attribute__((noinline))
@@ -119,7 +127,6 @@ function's generated code to be relocated to a quick-access zone of the executab
 #define vrestrict __restrict__
 
 
-
 /* ----- NULL Loadout (for everybody else) ------------------------------------- */
 #else
 
@@ -137,6 +144,8 @@ function's generated code to be relocated to a quick-access zone of the executab
 
 #define forceinline
 
+#define flatten
+
 #define noinline
 
 #define naked
@@ -148,7 +157,6 @@ function's generated code to be relocated to a quick-access zone of the executab
 /* ----- VARIABLE ANNOTATIONS ----- */
 
 #define vrestrict
-
 
 
 #endif
